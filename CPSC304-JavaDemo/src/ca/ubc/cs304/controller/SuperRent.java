@@ -14,14 +14,11 @@ import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import ca.ubc.cs304.model.VehicleModel;
-<<<<<<< HEAD
 import ca.ubc.cs304.model.CustomerModel;
 import ca.ubc.cs304.model.DailyRentalReport;
 import ca.ubc.cs304.model.DailyRentalReportBranch;
 import ca.ubc.cs304.model.DailyReturnReport;
 import ca.ubc.cs304.model.DailyReturnReportBranch;
-=======
->>>>>>> upstream/master
 import ca.ubc.cs304.model.RentalReceipt;
 import ca.ubc.cs304.model.ReservationReceipt;
 import ca.ubc.cs304.model.ReturnReceipt;
@@ -29,8 +26,7 @@ import ca.ubc.cs304.model.ReturnReceipt;
 /**
  * This is the main controller class that will orchestrate everything.
  */
-public class SuperRent
-		implements LoginWindowDelegate, ClientInterfaceDelegate, GenericInterfaceDelegate, ClerkInterfaceDelegate {
+public class SuperRent implements LoginWindowDelegate, ClientInterfaceDelegate, GenericInterfaceDelegate, ClerkInterfaceDelegate {
 	private DatabaseConnectionHandler dbHandler = null;
 	private LoginWindow loginWindow = null;
 	private ClientInterface clientInterface = null;
@@ -43,11 +39,7 @@ public class SuperRent
 	}
 
 	private void start() {
-<<<<<<< HEAD
 		login("ora_rjia", "a33550161");
-=======
-		login("ora_wgu","a31875164");
->>>>>>> upstream/master
 	}
 
 	/**
@@ -155,7 +147,12 @@ public class SuperRent
 		return report;
 	}
 
-	public DailyReturnReportBranch getDailyReturns(String branch) {
+	public DailyReturnReport getDailyReturns() {
+		DailyReturnReport report = dbHandler.getDailyReturns();
+		return report;
+	}
+
+	public DailyReturnReportBranch getDailyReturnsBranch(String branch) {
 		DailyReturnReportBranch report = dbHandler.getDailyReturnsBranch(branch);
 		return report;
 	}

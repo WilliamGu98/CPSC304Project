@@ -352,15 +352,7 @@ public class ClerkInterface extends JFrame{
 		//add action to btn
 		rentBtn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-<<<<<<< HEAD
-				RentalReceipt receipt = delegate.createRentalWithRes(Integer.valueOf(confField.getText()), Instant.now());
-				//Currently the GUI freezes if receipt is null, even with this if check
-				if (receipt != null){
-					openRentalReceipt(receipt);
-				}
-				else{
-					System.out.println("CONF NUMBER INVALID");
-=======
+
 				try {
 					RentalReceipt receipt = delegate.createRentalWithRes(Integer.valueOf(confField.getText()), Instant.now());
 					if (receipt == null){
@@ -373,7 +365,6 @@ public class ClerkInterface extends JFrame{
 				} catch (Exception err) {
 					JOptionPane.showMessageDialog(new JFrame(), "Input text not properly formatted"); //Popup error
 					openWithRes();
->>>>>>> upstream/master
 				}
 			}
 		 });
@@ -493,12 +484,7 @@ public class ClerkInterface extends JFrame{
 					startInstant = dateStart.toInstant();
 					endInstant = dateEnd.toInstant();
 					expInstant = dateExp.toInstant();
-<<<<<<< HEAD
-					RentalReceipt receipt = delegate.createRentalNoRes(String.valueOf(location.getText()), startInstant, String.valueOf(cardName.getText()), String.valueOf(cardNo.getText()), expInstant, String.valueOf(vtname.getText()), String.valueOf(dlicense.getText()), startInstant, endInstant);
-					//TODO: add no matching vehicle found error if receipt is null
-=======
 					RentalReceipt receipt = delegate.createRentalNoRes(String.valueOf(location.getText()), Instant.now(), String.valueOf(cardName.getText()), String.valueOf(cardNo.getText()), expInstant, String.valueOf(vtname.getText()), String.valueOf(dlicense.getText()), startInstant, endInstant);
->>>>>>> upstream/master
 					if (receipt != null){
 						openRentalReceipt(receipt);
 					}
@@ -574,12 +560,7 @@ public class ClerkInterface extends JFrame{
 		returnBtn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				contentPane.removeAll();
-<<<<<<< HEAD
-				ReturnReceipt receipt = delegate.returnVehicle(Integer.valueOf(rid.getText()), Instant.now(), Double.valueOf(endOdometer.getText()), Boolean.valueOf(fullTank.getText()));
-				System.out.println(Boolean.valueOf(fullTank.getText()));
-				openReturnReceipt(receipt);
-				
-=======
+
 				try{
 					int parsedRid = Integer.valueOf(rid.getText());
 					double parsedEndOdometer = Double.valueOf(endOdometer.getText());
@@ -596,7 +577,6 @@ public class ClerkInterface extends JFrame{
 					JOptionPane.showMessageDialog(new JFrame(), "Input text not properly formatted"); //Popup error
 					openReturn();
 				}
->>>>>>> upstream/master
 			}
 		 });
 		
