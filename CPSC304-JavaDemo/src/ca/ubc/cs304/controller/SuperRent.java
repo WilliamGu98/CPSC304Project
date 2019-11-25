@@ -10,17 +10,18 @@ import ca.ubc.cs304.ui.ClientInterface;
 import ca.ubc.cs304.ui.GenericInterface;
 import ca.ubc.cs304.ui.LoginWindow;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import ca.ubc.cs304.model.VehicleModel;
+<<<<<<< HEAD
 import ca.ubc.cs304.model.CustomerModel;
 import ca.ubc.cs304.model.DailyRentalReport;
 import ca.ubc.cs304.model.DailyRentalReportBranch;
 import ca.ubc.cs304.model.DailyReturnReport;
 import ca.ubc.cs304.model.DailyReturnReportBranch;
+=======
+>>>>>>> upstream/master
 import ca.ubc.cs304.model.RentalReceipt;
 import ca.ubc.cs304.model.ReservationReceipt;
 import ca.ubc.cs304.model.ReturnReceipt;
@@ -42,7 +43,11 @@ public class SuperRent
 	}
 
 	private void start() {
+<<<<<<< HEAD
 		login("ora_rjia", "a33550161");
+=======
+		login("ora_wgu","a31875164");
+>>>>>>> upstream/master
 	}
 
 	/**
@@ -103,7 +108,6 @@ public class SuperRent
 			dateEnd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(endTime);
 			startInstant = dateStart.toInstant();
 			endInstant = dateEnd.toInstant();
-
 		} catch (ParseException e) {
 		}
 
@@ -135,9 +139,8 @@ public class SuperRent
 		RentalReceipt receipt = dbHandler.createRentalWithRes(confNo, now);
 		return receipt;
 	}
-
-	public ReturnReceipt returnVehicle(int rid, Instant returnTimestamp, double endOdometer, boolean fullTank) {
-
+	
+	public ReturnReceipt returnVehicle(int rid, Instant returnTimestamp, double endOdometer, boolean fullTank){
 		ReturnReceipt receipt = dbHandler.returnVehicle(rid, returnTimestamp, endOdometer, fullTank);
 		return receipt;
 	}

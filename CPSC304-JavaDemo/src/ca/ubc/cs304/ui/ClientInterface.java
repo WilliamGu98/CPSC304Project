@@ -60,15 +60,18 @@ public class ClientInterface extends JFrame implements ActionListener {
 
 
 	public void showFrame(ClientInterfaceDelegate delegate) {
-        formatDateStart = new JFormattedTextField(createFormatter("####-##-## ##:##:##"));
-		formatDateEnd = new JFormattedTextField(createFormatter("####-##-## ##:##:##"));
+		formatDateStart = new JFormattedTextField(createFormatter("####-##-## ##:##")); 
+		formatDateStart.setColumns(TEXT_FIELD_WIDTH);
+
+		formatDateEnd = new JFormattedTextField(createFormatter("####-##-## ##:##")); 
+		formatDateEnd.setColumns(TEXT_FIELD_WIDTH);
 
 		this.delegate = delegate;
 
-		JLabel typeLabel = new JLabel("Enter Vehicle Type: ");
-		JLabel locationLabel = new JLabel("Enter Location: ");
-		JLabel dateLabelStart = new JLabel("Enter Start Date and Time: ");
-		JLabel dateLabelEnd = new JLabel("Enter End Date and Time: ");
+		JLabel typeLabel = new JLabel("Vehicle Type: ");
+		JLabel locationLabel = new JLabel("Location: ");
+		JLabel dateLabelStart = new JLabel("Start (yyyy-MM-dd HH:mm): ");
+		JLabel dateLabelEnd = new JLabel("End (yyyy-MM-dd HH:mm): ");
 
 		carType = new JTextField(TEXT_FIELD_WIDTH);
 		location = new JTextField(TEXT_FIELD_WIDTH);
@@ -266,31 +269,34 @@ public class ClientInterface extends JFrame implements ActionListener {
 
 	public void showAccount(VehicleModel v){
 		
-		JLabel typeLabel = new JLabel("Enter License: ");
+		JLabel typeLabel = new JLabel("Drivers License: ");
 		license = new JTextField(TEXT_FIELD_WIDTH);
-		JLabel nameL = new JLabel("Enter Name: ");
+		JLabel nameL = new JLabel("Name: ");
 		name = new JTextField(TEXT_FIELD_WIDTH);
 
-		JLabel phoneL = new JLabel("Enter phone number: ");
+		JLabel phoneL = new JLabel("Phone Number: ");
 		phone = new JTextField(TEXT_FIELD_WIDTH);
 
-		JLabel addressL = new JLabel("Enter address: ");
+		JLabel addressL = new JLabel("Address: ");
 		address = new JTextField(TEXT_FIELD_WIDTH);
 
-		JLabel cnameLabel = new JLabel("Enter Card Name: ");
+		JLabel cnameLabel = new JLabel("Card Name: ");
 		cardName = new JTextField(TEXT_FIELD_WIDTH);
 
-		JLabel cnoLabel = new JLabel("Enter Card No: ");
+		JLabel cnoLabel = new JLabel("Card No: ");
 		cardNo = new JTextField(TEXT_FIELD_WIDTH);
 
-		JLabel expLabel = new JLabel("Enter card expiration: ");
-		expDate = new JFormattedTextField(createFormatter("####-##-## ##:##:##"));
+		JLabel expLabel = new JLabel("Card Exp (yyyy-MM-dd): ");
+		expDate = new JFormattedTextField(createFormatter("####-##-##"));
+		expDate.setColumns(TEXT_FIELD_WIDTH);
 
-		JLabel startLabel = new JLabel("Enter start time: ");
-		start = new JFormattedTextField(createFormatter("####-##-## ##:##:##"));
+		JLabel startLabel = new JLabel("Start (yyyy-MM-dd HH:mm): ");
+		start = new JFormattedTextField(createFormatter("####-##-## ##:##"));
+		start.setColumns(TEXT_FIELD_WIDTH);
 
-		JLabel endLabel = new JLabel("Enter end time: ");
-		end = new JFormattedTextField(createFormatter("####-##-## ##:##:##"));
+		JLabel endLabel = new JLabel("End (yyyy-MM-dd HH:mm): ");
+		end = new JFormattedTextField(createFormatter("####-##-## ##:##")); 
+		end.setColumns(TEXT_FIELD_WIDTH);
 
 		JPanel rowPane = new JPanel();
 		rowPane.setLayout(new FlowLayout(FlowLayout.TRAILING));
@@ -380,9 +386,9 @@ public class ClientInterface extends JFrame implements ActionListener {
 		Instant endInstant = null;
 		Instant expInstant = null;
 		try {
-			dateStart = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(String.valueOf(end.getText()));
-			dateEnd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(String.valueOf(start.getText()));	
-			exp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(String.valueOf(expDate.getText()));	
+			dateStart = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(String.valueOf(end.getText()));
+			dateEnd = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(String.valueOf(start.getText()));	
+			exp = new SimpleDateFormat("yyyy-MM-dd").parse(String.valueOf(expDate.getText()));	
 			startInstant = dateStart.toInstant();
 			endInstant = dateEnd.toInstant();
 			expInstant = exp.toInstant();
@@ -424,10 +430,10 @@ public class ClientInterface extends JFrame implements ActionListener {
 			}
 		 });
 		JLabel confno = new JLabel("Confirmation Number: "+receipt.getConfNo());
-		JLabel vtype = new JLabel("Vehicle Type:"+receipt.getVehicleType());
-		JLabel location = new JLabel("Location:"+receipt.getLocation());					
-		JLabel startL = new JLabel("Start Time: "+receipt.getstartTimestamp());
-		JLabel endL = new JLabel("End Time: "+receipt.getendTimestamp());
+		JLabel vtype = new JLabel("Vehicle Type: "+receipt.getVehicleType());
+		JLabel location = new JLabel("Location: "+receipt.getLocation());					
+		JLabel startL = new JLabel("Start Time (yyyy-MM-dd HH:mm): "+receipt.getstartTimestamp());
+		JLabel endL = new JLabel("End Time (yyyy-MM-dd HH:mm): "+receipt.getendTimestamp());
 
 		contentPane.add(confno);
 		contentPane.add(vtype);

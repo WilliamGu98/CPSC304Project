@@ -352,6 +352,7 @@ public class ClerkInterface extends JFrame{
 		//add action to btn
 		rentBtn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+<<<<<<< HEAD
 				RentalReceipt receipt = delegate.createRentalWithRes(Integer.valueOf(confField.getText()), Instant.now());
 				//Currently the GUI freezes if receipt is null, even with this if check
 				if (receipt != null){
@@ -359,6 +360,20 @@ public class ClerkInterface extends JFrame{
 				}
 				else{
 					System.out.println("CONF NUMBER INVALID");
+=======
+				try {
+					RentalReceipt receipt = delegate.createRentalWithRes(Integer.valueOf(confField.getText()), Instant.now());
+					if (receipt == null){
+						JOptionPane.showMessageDialog(new JFrame(), "Confirmation number not found"); //Popup error
+						openWithRes();
+					}
+					else{
+						openRentalReceipt(receipt);
+					}
+				} catch (Exception err) {
+					JOptionPane.showMessageDialog(new JFrame(), "Input text not properly formatted"); //Popup error
+					openWithRes();
+>>>>>>> upstream/master
 				}
 			}
 		 });
@@ -389,22 +404,25 @@ public class ClerkInterface extends JFrame{
 				delegate.home();
 			}
 		 });
-		JLabel locationL = new JLabel("location: ");
+		JLabel locationL = new JLabel("Location: ");
 		location = new JTextField(TEXT_FIELD_WIDTH);
-		JLabel cardNameL = new JLabel("card name: ");
+		JLabel cardNameL = new JLabel("Card Name: ");
 		cardName = new JTextField(TEXT_FIELD_WIDTH);
-		JLabel cardNoL = new JLabel("card no: ");
+		JLabel cardNoL = new JLabel("Card No: ");
 		cardNo = new JTextField(TEXT_FIELD_WIDTH);
-		JLabel expDateL = new JLabel("card expiration date: ");
-		expDate = new JFormattedTextField(createFormatter("####-##-## ##:##:##"));
-		JLabel vtnameL = new JLabel("vehicle type: ");
+		JLabel expDateL = new JLabel("Card Expiration Date (yyyy-MM-dd): "); 
+		expDate = new JFormattedTextField(createFormatter("####-##-##"));
+		expDate.setColumns(TEXT_FIELD_WIDTH); 
+		JLabel vtnameL = new JLabel("Vehicle Type: ");
 		vtname = new JTextField(TEXT_FIELD_WIDTH);
-		JLabel dlicenseL = new JLabel("drivers license: ");
+		JLabel dlicenseL = new JLabel("Drivers License: ");
 		dlicense = new JTextField(TEXT_FIELD_WIDTH);
-		JLabel startTimestampL = new JLabel("start: ");
-		startTimestamp =  new JFormattedTextField(createFormatter("####-##-## ##:##:##"));
-		JLabel endTimestampL = new JLabel("end: ");
-		endTimestamp =  new JFormattedTextField(createFormatter("####-##-## ##:##:##"));
+		JLabel startTimestampL = new JLabel("Start (yyyy-MM-dd HH:mm): "); 
+		startTimestamp =  new JFormattedTextField(createFormatter("####-##-## ##:##"));
+		startTimestamp.setColumns(TEXT_FIELD_WIDTH); 
+		JLabel endTimestampL = new JLabel("End (yyyy-MM-dd HH:mm): "); 
+		endTimestamp =  new JFormattedTextField(createFormatter("####-##-## ##:##"));
+		endTimestamp.setColumns(TEXT_FIELD_WIDTH); 
 		JButton rentBtn = new JButton("Rent");
 		JPanel rowPane = new JPanel();
 		JPanel rowPane1 = new JPanel();
@@ -450,6 +468,7 @@ public class ClerkInterface extends JFrame{
 		rowPane8.add(rentBtn);
 
 		contentPane.add(rowPane);
+		contentPane.add(rowPane1);
 		contentPane.add(rowPane2);
 		contentPane.add(rowPane3);
 		contentPane.add(rowPane4);
@@ -468,23 +487,28 @@ public class ClerkInterface extends JFrame{
 				Instant endInstant = null;
 				Instant expInstant =  null;
 				try {
-					dateStart = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(String.valueOf(startTimestamp.getText()));
-					dateEnd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(String.valueOf(endTimestamp.getText()));
-					dateExp= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(String.valueOf(expDate.getText()));
+					dateStart = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(String.valueOf(startTimestamp.getText()));
+					dateEnd = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(String.valueOf(endTimestamp.getText()));
+					dateExp= new SimpleDateFormat("yyyy-MM-dd").parse(String.valueOf(expDate.getText()));
 					startInstant = dateStart.toInstant();
 					endInstant = dateEnd.toInstant();
 					expInstant = dateExp.toInstant();
+<<<<<<< HEAD
 					RentalReceipt receipt = delegate.createRentalNoRes(String.valueOf(location.getText()), startInstant, String.valueOf(cardName.getText()), String.valueOf(cardNo.getText()), expInstant, String.valueOf(vtname.getText()), String.valueOf(dlicense.getText()), startInstant, endInstant);
 					//TODO: add no matching vehicle found error if receipt is null
+=======
+					RentalReceipt receipt = delegate.createRentalNoRes(String.valueOf(location.getText()), Instant.now(), String.valueOf(cardName.getText()), String.valueOf(cardNo.getText()), expInstant, String.valueOf(vtname.getText()), String.valueOf(dlicense.getText()), startInstant, endInstant);
+>>>>>>> upstream/master
 					if (receipt != null){
 						openRentalReceipt(receipt);
 					}
 					else{
-						System.out.println("NO MATCHING VEHICLES FOUND");
+						JOptionPane.showMessageDialog(new JFrame(), "No matching vehicles found"); //Popup error
+						openNoRes();
 					}
-
 				} catch (ParseException err) {
-				
+					JOptionPane.showMessageDialog(new JFrame(), "Input text not properly formatted"); //Popup error
+					openNoRes();
 				}
 			}
 		 });
@@ -514,13 +538,11 @@ public class ClerkInterface extends JFrame{
 				delegate.home();
 			}
 		 });
-		JLabel ridL = new JLabel("rental id: ");
+		JLabel ridL = new JLabel("Rental ID: ");
 		rid = new JTextField(TEXT_FIELD_WIDTH);
-		JLabel retL = new JLabel("return time: ");
-		returnTimestamp = new JFormattedTextField(createFormatter("####-##-## ##:##:##"));
-		JLabel endOdometerL = new JLabel("end odometer: ");
+		JLabel endOdometerL = new JLabel("End Odometer: ");
 		endOdometer = new JTextField(TEXT_FIELD_WIDTH);
-		JLabel fullTankL = new JLabel("full tank: ");
+		JLabel fullTankL = new JLabel("Full Tank (true or false): ");
 		fullTank = new JTextField(TEXT_FIELD_WIDTH);
 		JButton returnBtn = new JButton("Return Vehicle");
 
@@ -528,7 +550,6 @@ public class ClerkInterface extends JFrame{
 		JPanel rowPane1 = new JPanel();
 		JPanel rowPane2 = new JPanel();
 		JPanel rowPane3 = new JPanel();
-		JPanel rowPane4 = new JPanel();
 		
 		rowPane.setLayout(new FlowLayout(FlowLayout.TRAILING));
 		rowPane.add(ridL);
@@ -541,28 +562,41 @@ public class ClerkInterface extends JFrame{
 		rowPane2.setLayout(new FlowLayout(FlowLayout.TRAILING));
 		rowPane2.add(fullTankL);
 		rowPane2.add(fullTank);
-
-		rowPane3.setLayout(new FlowLayout(FlowLayout.TRAILING));
-		rowPane3.add(retL);
-		rowPane3.add(returnTimestamp);
 		
-		rowPane4.setLayout(new FlowLayout(FlowLayout.CENTER));
-		rowPane4.add(returnBtn);
+		rowPane3.setLayout(new FlowLayout(FlowLayout.CENTER));
+		rowPane3.add(returnBtn);
 
 		contentPane.add(rowPane);
+		contentPane.add(rowPane1);
 		contentPane.add(rowPane2);
 		contentPane.add(rowPane3);
-		contentPane.add(rowPane4);
-
-
 
 		returnBtn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				contentPane.removeAll();
+<<<<<<< HEAD
 				ReturnReceipt receipt = delegate.returnVehicle(Integer.valueOf(rid.getText()), Instant.now(), Double.valueOf(endOdometer.getText()), Boolean.valueOf(fullTank.getText()));
 				System.out.println(Boolean.valueOf(fullTank.getText()));
 				openReturnReceipt(receipt);
 				
+=======
+				try{
+					int parsedRid = Integer.valueOf(rid.getText());
+					double parsedEndOdometer = Double.valueOf(endOdometer.getText());
+					boolean parsedFullTank = Boolean.valueOf(fullTank.getText());
+					ReturnReceipt receipt = delegate.returnVehicle(parsedRid, Instant.now(), parsedEndOdometer, parsedFullTank); //This throws exception if receipt is null
+					if (receipt == null){
+						JOptionPane.showMessageDialog(new JFrame(), "Rental id does not exist"); //Popup error
+						openReturn();
+					}
+					else{
+						openReturnReceipt(receipt);
+					}
+				} catch (Exception err){
+					JOptionPane.showMessageDialog(new JFrame(), "Input text not properly formatted"); //Popup error
+					openReturn();
+				}
+>>>>>>> upstream/master
 			}
 		 });
 		
@@ -576,6 +610,7 @@ public class ClerkInterface extends JFrame{
 		 this.setVisible(true);
 	}
 	
+	//Assumes receipt is NOT NULL
 	public void openReturnReceipt(ReturnReceipt receipt){
 		JPanel rowPane0 = new JPanel();
 		rowPane0.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -591,7 +626,7 @@ public class ClerkInterface extends JFrame{
 			}
 		 });
 		JLabel confno = new JLabel("Confirmation Number: "+receipt.getConfNo());
-		JLabel hourlyRate = new JLabel("Hourly Rate:"+receipt.getHourlyRate());					
+		JLabel hourlyRate = new JLabel("Hourly Rate: "+receipt.getHourlyRate());					
 		JLabel hoursRented = new JLabel("Hours Rented: "+receipt.getHoursRented());
 		JLabel hourlyTotal = new JLabel("Hourly Subtotal: "+receipt.getHourlyTotal());
 		JLabel kiloRate = new JLabel("Kilo Rate: "+receipt.getKiloRate());
@@ -617,6 +652,7 @@ public class ClerkInterface extends JFrame{
 		 this.setVisible(true);
 	}
 
+	//Assumes receipt is NOT NULL
 	public void openRentalReceipt(RentalReceipt receipt) {
 		JPanel rowPane0 = new JPanel();
 		rowPane0.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -630,13 +666,14 @@ public class ClerkInterface extends JFrame{
 				dispose();
 				delegate.home();
 			}
-		 });
+		});
+
 		JLabel rid = new JLabel("Rental ID: "+receipt.getRid());
 		JLabel confno = new JLabel("Reservation Confirmation Number: "+receipt.getConfNo());
 		JLabel location = new JLabel("Location: "+receipt.getLocation());					
 		JLabel vtype = new JLabel("Vehicle Type: "+receipt.getVehicleType());
-		JLabel start = new JLabel("Start Time: "+receipt.getStartTimestamp());
-		JLabel license= new JLabel("License: "+receipt.getDlicense()); //THIS RETURNS NULL
+		JLabel start = new JLabel("Start Time (yyyy-MM-dd HH:mm): "+receipt.getStartTimestamp());
+		JLabel license= new JLabel("License: "+receipt.getDlicense()); 
 		JLabel odometer = new JLabel("Odometer: "+receipt.getStartOdometer() + " KM");
 
 		contentPane.add(rid);
@@ -646,6 +683,7 @@ public class ClerkInterface extends JFrame{
 		contentPane.add(start);
 		contentPane.add(license);
 		contentPane.add(odometer);
+
 		this.pack();
 		// center the frame
 		Dimension d = this.getToolkit().getScreenSize();
@@ -653,7 +691,7 @@ public class ClerkInterface extends JFrame{
 		this.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
 
 		// make the window visible
-		 this.setVisible(true);
+		this.setVisible(true);
 
 	}
 }
