@@ -10,6 +10,10 @@ import javax.swing.text.MaskFormatter;
 import ca.ubc.cs304.delegates.ClerkInterfaceDelegate;
 import ca.ubc.cs304.delegates.ClientInterfaceDelegate;
 import ca.ubc.cs304.model.CustomerModel;
+import ca.ubc.cs304.model.DailyRentalReport;
+import ca.ubc.cs304.model.DailyRentalReportBranch;
+import ca.ubc.cs304.model.DailyReturnReport;
+import ca.ubc.cs304.model.DailyReturnReportBranch;
 import ca.ubc.cs304.model.RentalReceipt;
 import ca.ubc.cs304.model.ReservationReceipt;
 import ca.ubc.cs304.model.ReturnReceipt;
@@ -22,6 +26,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * The class is only responsible for displaying and handling the login GUI. 
@@ -69,13 +74,15 @@ public class ClerkInterface extends JFrame{
 		
 		JButton rentButton = new JButton("Rent a Vehicle");
 		JButton returnButton = new JButton("Return a Vehicle");
-		JButton reportButton = new JButton("Generate Daily Report");
+		JButton report1Button = new JButton("Generate Daily Report- Car Rentals");
+		JButton report2Button = new JButton("Generate Daily Report- Car Returns");
 		contentPane = new JPanel();
 		this.setContentPane(contentPane);
 	
 		contentPane.add(rentButton);
 		contentPane.add(returnButton);
-		contentPane.add(reportButton);
+		contentPane.add(report1Button);
+		contentPane.add(report2Button);
         
 		// set Box Layout 
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
@@ -93,9 +100,14 @@ public class ClerkInterface extends JFrame{
 			}
          });
 
-		reportButton.addActionListener(new ActionListener(){
+		report1Button.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
                 openReport();
+			}
+		 });
+		 report2Button.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+                openReport2();
 			}
          });
 		this.pack();
@@ -109,10 +121,164 @@ public class ClerkInterface extends JFrame{
 	}
 	
 	public void openReport(){
+		
+		contentPane.removeAll();
+		JPanel rowPane0 = new JPanel();
+		rowPane0.setLayout(new FlowLayout(FlowLayout.CENTER));
+	
+		JButton homeButton = new JButton("Home");
+		rowPane0.add(homeButton);
+		contentPane.add(rowPane0);
+		homeButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				contentPane.removeAll();
+				dispose();
+				delegate.home();
+			}
+		 });
 
-		System.out.println("Report");
+		 
+		DailyRentalReport report = delegate.getDailyRentals();
+		
+		JLabel totalReturns = new JLabel("Total Rentals: " + report.totalVehicles);
+	
+		JPanel row = new JPanel();
+		row.setLayout(new FlowLayout(FlowLayout.LEADING));
+		row.add(totalReturns);
+		contentPane.add(row);
+		contentPane.add(row);
+	
+		for (Map.Entry<String,DailyRentalReportBranch> entry : report.branchReports.entrySet()){  
+			//create entry with branch and rental detail
+			JButton detailBtn = new JButton("View Detail");
+			JPanel rowPane = new JPanel();
+			JPanel rowPane2 = new JPanel();
+			rowPane.setLayout(new FlowLayout(FlowLayout.LEADING));
+			rowPane.add(new JLabel(entry.getKey()));
+			rowPane.add(detailBtn);
+			contentPane.add(rowPane);
+			contentPane.add(rowPane2);
+			
+			
+			detailBtn.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					//display details for branch
+					System.out.println(entry.getKey());
+					DailyRentalReportBranch dailyRentalsBranch = delegate.getDailyRentalsBranch(entry.getKey());
+					openRentalsBranch(dailyRentalsBranch, rowPane2);
+			}
+		});
+		} 
+
+		this.pack();
+		// center the frame
+		Dimension d = this.getToolkit().getScreenSize();
+		Rectangle r = this.getBounds();
+		this.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
+
+		// make the window visible
+		 this.setVisible(true);
+
 	}
 
+	public void openReport2(){
+		
+		contentPane.removeAll();
+		JPanel rowPane0 = new JPanel();
+		rowPane0.setLayout(new FlowLayout(FlowLayout.CENTER));
+	
+		JButton homeButton = new JButton("Home");
+		rowPane0.add(homeButton);
+		contentPane.add(rowPane0);
+		homeButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				contentPane.removeAll();
+				dispose();
+				delegate.home();
+			}
+		 });
+
+		 
+		DailyReturnReport report = delegate.getDailyReturns();
+		
+		JLabel totalReturns = new JLabel("Total Rentals: " + report.totalVehicles);
+		JLabel totalRev = new JLabel("Total Revenue: " + report.totalRevenue);
+		JPanel row = new JPanel();
+		row.setLayout(new FlowLayout(FlowLayout.LEADING));
+		row.add(totalReturns);
+		row.add(totalRev);
+		contentPane.add(row);
+		contentPane.add(row);
+	
+		for (Map.Entry<String,DailyReturnReportBranch> entry : report.branchReports.entrySet()){  
+			//create entry with branch and rental detail
+			JButton detailBtn = new JButton("View Detail");
+			JPanel rowPane = new JPanel();
+			JPanel rowPane2 = new JPanel();
+			rowPane.setLayout(new FlowLayout(FlowLayout.LEADING));
+			rowPane.add(new JLabel(entry.getKey()));
+			rowPane.add(detailBtn);
+			contentPane.add(rowPane);
+			contentPane.add(rowPane2);
+			
+			detailBtn.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					//display details for branch
+					System.out.println(entry.getKey());
+					DailyReturnReportBranch dailyReturnBranch = delegate.getDailyReturnsBranch(entry.getKey());
+					openReturnBranch(dailyReturnBranch, rowPane2);
+			}
+		});
+		} 
+
+		this.pack();
+		// center the frame
+		Dimension d = this.getToolkit().getScreenSize();
+		Rectangle r = this.getBounds();
+		this.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
+
+		// make the window visible
+		 this.setVisible(true);
+
+	}
+
+	public void openReturnBranch(DailyReturnReportBranch dailyReturnBranch, JPanel rowPane){
+	
+		for (Map.Entry<String,Integer> sEntry : dailyReturnBranch.numVehicles.entrySet()){
+			rowPane.setLayout(new FlowLayout(FlowLayout.LEADING));
+			System.out.println(sEntry.getKey());
+			rowPane.add(new JLabel(sEntry.getKey()));
+			rowPane.add(new JLabel(String.valueOf(sEntry.getValue())));
+		}
+		for (Map.Entry<String,Double> sEntry : dailyReturnBranch.revenue.entrySet()){
+			rowPane.setLayout(new FlowLayout(FlowLayout.LEADING));
+			System.out.println(sEntry.getKey());
+			rowPane.add(new JLabel(sEntry.getKey()));
+			rowPane.add(new JLabel(String.valueOf(sEntry.getValue())));
+		}
+		this.pack();
+		// center the frame
+		Dimension d = this.getToolkit().getScreenSize();
+		Rectangle r = this.getBounds();
+		this.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
+		this.setVisible(true);
+	}
+	
+	public void openRentalsBranch(DailyRentalReportBranch dailyRentalsBranch, JPanel rowPane){
+		System.out.println( dailyRentalsBranch);
+		for (Map.Entry<String,Integer> sEntry : dailyRentalsBranch.numVehicles.entrySet()){
+			rowPane.setLayout(new FlowLayout(FlowLayout.LEADING));
+			System.out.println(sEntry.getKey());
+			rowPane.add(new JLabel(sEntry.getKey()));
+			rowPane.add(new JLabel(String.valueOf(sEntry.getValue())));
+		}
+		this.pack();
+		// center the frame
+		Dimension d = this.getToolkit().getScreenSize();
+		Rectangle r = this.getBounds();
+		this.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
+		this.setVisible(true);
+	}
 	//open rent page
 	public void openRent(){
 		contentPane.removeAll();
@@ -186,6 +352,15 @@ public class ClerkInterface extends JFrame{
 		//add action to btn
 		rentBtn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+<<<<<<< HEAD
+				RentalReceipt receipt = delegate.createRentalWithRes(Integer.valueOf(confField.getText()), Instant.now());
+				//Currently the GUI freezes if receipt is null, even with this if check
+				if (receipt != null){
+					openRentalReceipt(receipt);
+				}
+				else{
+					System.out.println("CONF NUMBER INVALID");
+=======
 				try {
 					RentalReceipt receipt = delegate.createRentalWithRes(Integer.valueOf(confField.getText()), Instant.now());
 					if (receipt == null){
@@ -198,6 +373,7 @@ public class ClerkInterface extends JFrame{
 				} catch (Exception err) {
 					JOptionPane.showMessageDialog(new JFrame(), "Input text not properly formatted"); //Popup error
 					openWithRes();
+>>>>>>> upstream/master
 				}
 			}
 		 });
@@ -317,7 +493,12 @@ public class ClerkInterface extends JFrame{
 					startInstant = dateStart.toInstant();
 					endInstant = dateEnd.toInstant();
 					expInstant = dateExp.toInstant();
+<<<<<<< HEAD
+					RentalReceipt receipt = delegate.createRentalNoRes(String.valueOf(location.getText()), startInstant, String.valueOf(cardName.getText()), String.valueOf(cardNo.getText()), expInstant, String.valueOf(vtname.getText()), String.valueOf(dlicense.getText()), startInstant, endInstant);
+					//TODO: add no matching vehicle found error if receipt is null
+=======
 					RentalReceipt receipt = delegate.createRentalNoRes(String.valueOf(location.getText()), Instant.now(), String.valueOf(cardName.getText()), String.valueOf(cardNo.getText()), expInstant, String.valueOf(vtname.getText()), String.valueOf(dlicense.getText()), startInstant, endInstant);
+>>>>>>> upstream/master
 					if (receipt != null){
 						openRentalReceipt(receipt);
 					}
@@ -393,6 +574,12 @@ public class ClerkInterface extends JFrame{
 		returnBtn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				contentPane.removeAll();
+<<<<<<< HEAD
+				ReturnReceipt receipt = delegate.returnVehicle(Integer.valueOf(rid.getText()), Instant.now(), Double.valueOf(endOdometer.getText()), Boolean.valueOf(fullTank.getText()));
+				System.out.println(Boolean.valueOf(fullTank.getText()));
+				openReturnReceipt(receipt);
+				
+=======
 				try{
 					int parsedRid = Integer.valueOf(rid.getText());
 					double parsedEndOdometer = Double.valueOf(endOdometer.getText());
@@ -409,6 +596,7 @@ public class ClerkInterface extends JFrame{
 					JOptionPane.showMessageDialog(new JFrame(), "Input text not properly formatted"); //Popup error
 					openReturn();
 				}
+>>>>>>> upstream/master
 			}
 		 });
 		
